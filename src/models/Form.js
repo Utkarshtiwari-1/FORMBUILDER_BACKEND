@@ -2,11 +2,15 @@ const mongoose = require('mongoose');
 
 // Schema for individual questions in the form
 const QuestionSchema = new mongoose.Schema({
-    questionText: { type: String, required: true }, // The text of the question
-    questionType: { type: String, enum: ['single', 'multiple', 'text', 'email', 'contact', 'phoneNum', 'document','textarea', 'dropdown', 'radio'], required: true }, // Type of the question
-    options: [{ type: String }], // Options for radio, checkbox, or dropdown (if applicable)
-    isRequired: { type: Boolean, default: false }, // Whether the question is mandatory
-    order: { type: Number, required: true } // Order of the question in the form
+    questionText: { type: String, required: true },
+    questionType: {
+        type: String,
+        enum: ['single', 'multiple', 'text', 'email', 'contact', 'phoneNum', 'document', 'textarea', 'dropdown', 'radio'], // Added missing types
+        required: true
+    },
+    options: [{ type: String }],
+    isRequired: { type: Boolean, default: false },
+    order: { type: Number, required: true }
 });
 
 // Schema for form responses (optional if you want to store responses)
@@ -19,7 +23,7 @@ const ResponseSchema = new mongoose.Schema({
 const FormSchema = new mongoose.Schema({
     title: { type: String, required: true },
     description: { type: String },
-    Banner_url:{type:String},
+    Banner_url: { type: String },
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'Admin', required: true }, // Reference to the admin user who created the form
     questions: [QuestionSchema],
     responses: [ResponseSchema],
@@ -28,4 +32,4 @@ const FormSchema = new mongoose.Schema({
     isPublished: { type: Boolean, default: false }
 });
 
-module.exports = mongoose.model('Form', FormSchema);
+module.exports = mongoose.model('Form', FormSchema);
