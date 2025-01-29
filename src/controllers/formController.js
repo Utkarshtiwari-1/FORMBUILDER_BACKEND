@@ -10,7 +10,7 @@ exports.createForm = async (req, res) => {
         const adminId = req.body.createdBy || req.user.id;
 
         const { title, description} = req.body;
-        const questions = req.body.questions?JSON.parse(req.body.questions):null;
+        const questions = JSON.parse(req.body.questions);
         console.log("questions",questions);
         const bannerimage_file = req?.files?.BannerImage;
 
