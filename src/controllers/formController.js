@@ -6,26 +6,22 @@ require("dotenv").config();
 exports.createForm = async (req, res) => {
     try {
         // If the adminId is passed from the request body, you can use it directly
-        // Alternatively, if you have authentication middleware, you can use `req.user.id`
+        // Alternatively, if you have authentication middleware, you can use req.user.id
         const adminId = req.body.createdBy || req.user.id;
 
-        const { title, description} = req.body;
-        const questions = JSON.parse(req.body.questions);
-        console.log("questions",questions);
+        const { title, description, questions } = req.body;
         const bannerimage_file = req?.files?.BannerImage;
 
         // Ensure that the adminId is provided
         if (!adminId) {
             return res.status(400).json({ error: "Admin ID is required" });
         }
-        
+
         let Banner_url = null;
-        if(bannerimage_file)
-        {
-            const filedata =await  Uploadmedia(bannerimage_file,process.env.FOLDER_NAME);
-            console.log("media uploaded",filedata);
-            if(filedata)
-            {
+        if (bannerimage_file) {
+            const filedata = await Uploadmedia(bannerimage_file, process.env.FOLDER_NAME);
+            console.log("media uploaded", filedata);
+            if (filedata) {
                 Banner_url = filedata.secure_url;
             }
         }
@@ -34,11 +30,10 @@ exports.createForm = async (req, res) => {
             title,
             description,
             Banner_url,
-            createdBy: adminId, // adminId here
-            questions
+            questions,
+            createdBy: adminId // adminId here
         });
-        
-        console.log("newForm",newForm);
+
         // Save the form to the database
         const form = await newForm.save();
 
@@ -95,6 +90,6 @@ exports.deleteForm = async (req, res) => {
         if (!form) return res.status(404).json({ msg: 'Form not found' });
         res.json({ msg: 'Form deleted successfully' });
     } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
+        res.status(500).json({ error: err.message });
+    }
 };
